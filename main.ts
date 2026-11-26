@@ -14,17 +14,23 @@
 //    TUESDAY 24 Nov and is NOT claimed as a 25 Nov event here.
 //  - Cartagena hostages freed in the early hours of Wednesday (AP, 06:30 GMT).
 //  - Samara refineries hit overnight into 25 Nov (Reuters; Ukraine General
-//    Staff confirmed Syzran + Kuibyshev; one killed; 305 drones downed).
-//  - Asian markets: Nikkei -2.8%, Kospi -6.2% on USTR tariff-probe fears
-//    (Reuters, 25 Nov closes).
-//  - Bangladesh garment wage +36% to 17,000 taka, approved early Wednesday.
+//    Staff confirmed Syzran + Kuibyshev; one killed).
+//  - US proposes tariffs on 14 trading partners (Reuters, 25 Nov); Asian
+//    markets slide on the probe fears: Nikkei -2.8%, Kospi -6.2%.
+//  - Nigeria seizes $227M of meth in Enugu, 5 Mexicans held (Reuters,
+//    25 Nov 12:44 UTC); militants kill 30+ in Niger State (Reuters,
+//    25 Nov 18:40 UTC); Saudi national kidnapped in Niger, first
+//    reported 25 Nov 11:53 UTC (Reuters).
+//  - Hera reveals a stadium-size crater on Dimorphos (Reuters / CNN /
+//    Physics World, 25 Nov 17:30 UTC); the asteroid now tumbles.
+//  - Iowa army detonates ~5 tons of old explosives on Wednesday 25 Nov
+//    09:00 CT (CNN / WSJ); all-clear the same evening.
 //  - Ramaphosa Farmgate reprieve, Gaza strike killing Hamas security chief
 //    Mohammad Abuelouf, Sudan drone strikes killing 19, Bulgaria boat,
 //    Iraq court, Canary record, Italy rebuke, Lebanon airport, Pope on
 //    COP31, Russia power-grid hits, Iran blockade, Hasina, royal break-in,
-//    Johnson troop call, Canada students, Morocco CAS appeal, Hera images,
-//    Australia-Solomon treaty, Iowa explosives: all from the Reuters World
-//    News Summary published 25 Nov 2026.
+//    Johnson troop call, Hera images, Australia-Solomon treaty: all from
+//    the Reuters World News Summary published 25 Nov 2026.
 //  - Trump floats a pardon for Nvidia chief Jensen Huang (25 Nov); Nvidia
 //    falls 8% on Wednesday (stockanalysis / Yahoo).
 //  - Abrego Garcia lands in Madrid early 25 Nov and speaks the same day.
@@ -33,6 +39,10 @@
 //  Huawei verdict (DOJ/CNN 24 Nov), Chen Jining probe (Xinhua 24 Nov),
 //  Democrats' 259th House seat (AP called it Tue 24 Nov), Senegal CAS
 //  ruling (announced Tue 24 Nov), turkey pardon + US confidence (Tue 24 Nov).
+// ROUND 2 removals: Canada students (a feature about curbs in force since
+//  2023, not a 25 Nov event), Morocco CAS appeal (the ruling was 24 Nov),
+//  Oil +2% (duplicate of the Ras Tanura panel + Brent quote). US tells
+//  citizens to leave Iran demoted from MEDS to MORE (single source).
 // Numbering is 1-35 with no gaps: 3 lead panels (1-3), ten more (4-13),
 // twenty-two more (14-35).
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -387,12 +397,12 @@ const MEDS: Med[] = [
   { n: 5, head: "SHANGHAI LEADERS BACK BEIJING", body: "Shanghai's leaders pledge loyalty a day after the graft probe of party chief Chen Jining.", tag: "CONFIRMED", tagFill: CONF },
   { n: 6, head: "CARTAGENA SIEGE ENDS", body: "Colombian forces storm a Cartagena supermarket and free the remaining hostages; one captor dies.", tag: "CONFIRMED", tagFill: CONF },
   { n: 7, head: "UKRAINE HITS 2 SAMARA REFINERIES", body: "Drones set fire to the Syzran and Kuibyshev refineries, 800 km inside Russia; one person dies.", tag: "CONFIRMED", tagFill: CONF },
-  { n: 8, head: "MARKETS SLIDE ON TARIFF FEARS", body: "Asian stocks tumble as Washington readies tariffs on 16 partners. Nikkei falls 2.8%, Seoul 6.2%.", tag: "CONFIRMED", tagFill: CONF },
-  { n: 9, head: "RAMAPHOSA WINS FARMGATE CASE", body: "A court sets aside the report that paved the way to impeach the president over cash in a sofa.", tag: "CONFIRMED", tagFill: CONF },
-  { n: 10, head: "US TELLS CITIZENS TO LEAVE IRAN", body: "Washington urges Americans to leave Iran at once as Hormuz mine claims and war fears mount.", tag: "REPORTED", tagFill: REP },
-  { n: 11, head: "ABREGO GARCIA LANDS IN SPAIN", body: "Salvadoran migrant Kilmar Abrego Garcia lands in Madrid, ending the long deportation battle.", tag: "CONFIRMED", tagFill: CONF },
-  { n: 12, head: "PUIGDEMONT TO RETURN 12 DEC", body: "Carles Puigdemont will return to Spain on 12 December, ending nearly a decade in exile.", tag: "CONFIRMED", tagFill: CONF },
-  { n: 13, head: "NVIDIA TUMBLES AGAIN", body: "Nvidia falls 8% on Wednesday as the AI sell-off spreads, erasing half of Monday's Huang rally.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 8, head: "US PLANS TARIFFS ON 14 PARTNERS", body: "Washington proposes tariffs on 14 partners to fight overcapacity; Nikkei -2.8%, Seoul -6.2%.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 9, head: "NIGERIA SEIZES $227M OF METH", body: "NDLEA seizes 1.5 tonnes of meth worth $227M in Enugu; five Mexican experts arrested.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 10, head: "HERA SHOWS STADIUM-SIZE CRATER", body: "Hera reveals a stadium-size crater on Dimorphos; the asteroid now tumbles, rocks in orbit.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 11, head: "RAMAPHOSA WINS FARMGATE CASE", body: "A court sets aside the report that paved the way to impeach the president over cash in a sofa.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 12, head: "ABREGO GARCIA LANDS IN SPAIN", body: "Salvadoran migrant Kilmar Abrego Garcia lands in Madrid, ending the long deportation battle.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 13, head: "PUIGDEMONT TO RETURN 12 DEC", body: "Carles Puigdemont will return to Spain on 12 December, ending nearly a decade in exile.", tag: "CONFIRMED", tagFill: CONF },
 ];
 
 // Stories 14-35: one line each. Every item fits its column (checked by
@@ -414,34 +424,38 @@ const MORE: string[] = [
   "HASINA RETURN NOT EXTRADITION",
   "2 CHARGED OVER ROYAL BREAK-IN",
   "KREMLIN REJECTS JOHNSON CALL",
-  "CANADA CURBS FOREIGN STUDENTS",
-  "OIL JUMPS 2% ON RAS TANURA CLAIM",
-  "MOROCCO TO APPEAL CAS RULING",
-  "HERA SHOWS ASTEROID CRATER",
+  "MILITANTS KILL 30+ IN NIGER STATE",
+  "SAUDI NATIONAL KIDNAPPED IN NIGER",
+  "US TELLS CITIZENS TO LEAVE IRAN",
+  "NVIDIA TUMBLES 8% ON AI SELL-OFF",
   "AUSTRALIA-SOLOMON TREATY SIGNED",
-  "IOWA TO DETONATE OLD EXPLOSIVES",
+  "IOWA DETONATES OLD EXPLOSIVES",
 ];
 
-// Timeline times are real wire timestamps, converted to UTC:
-// 00:18 launch, 03:56 docking, 06:30 Cartagena video, 07:20 AP wage wire,
-// 11:10 Puigdemont wire (16:40 IST), 12:36 Hormuz report (16:36 +04:00),
-// 15:16 Brent quote (10:16 ET), 16:08 Nvidia report (11:08 ET).
+// Timeline times are real wire timestamps, converted to UTC, and every
+// slot names a story that is actually in the 35 below (round 2 fix: the
+// old 07:20 "WAGE +36%" slot quoted an AP wire with no matching story):
+// 00:18 launch, 03:56 docking, 06:30 Cartagena video, 11:10 Puigdemont
+// wire (16:40 IST), 12:36 Hormuz report (16:36 +04:00), 12:44 Nigeria
+// meth seizure (Reuters), 15:16 Brent quote (10:16 ET), 16:08 Nvidia
+// report (11:08 ET), 17:30 Hera images (Physics World).
 const TIMELINE: [string, string][] = [
   ["00:18", "SHENZHOU-24"],
   ["03:56", "DOCKING"],
   ["06:30", "CARTAGENA"],
-  ["07:20", "WAGE +36%"],
   ["11:10", "PUIGDEMONT"],
   ["12:36", "HORMUZ"],
+  ["12:44", "NIGERIA METH"],
   ["15:16", "BRENT $93.60"],
   ["16:08", "NVIDIA -8%"],
+  ["17:30", "HERA CRATER"],
 ];
 
 const STATS: [string, string, string][] = [
-  ["305", "DRONES DOWNED", "OVERNIGHT, RUSSIA"],
+  ["$227M", "METH SEIZED", "NIGERIA, 5 HELD"],
   ["2,100", "MIGRANTS IN A DAY", "CANARY ISLANDS"],
   ["-6.2%", "KOSPI FALLS", "SEOUL, WEDNESDAY"],
-  ["+36%", "WAGE RISE", "GARMENT, BANGLADESH"],
+  ["30", "DEATHS IN NIGERIA", "MILITANT ATTACK"],
   ["9 DEAD", "JAVA MINE FLOOD", "17 STILL TRAPPED"],
   ["19", "KILLED IN SUDAN", "DRONE STRIKES"],
 ];
@@ -486,7 +500,7 @@ function verifyLayout(): void {
     if (textWidth(s[1], 10) > 158) warn("stat label too wide: " + s[1]);
     if (textWidth(s[2], 9) > 158) warn("stat sub too wide: " + s[2]);
   }
-  if (textWidth("FIRST PAKISTANI IN ORBIT - 35 STORIES, 9 REGIONS, 10 FIELDS, 3 SCENES, UTC TIMELINE AND DATE-CHECK AUDIT", 10) > 976) {
+  if (textWidth("FIRST PAKISTANI IN ORBIT - 35 STORIES, 9 REGIONS, 11 FIELDS, 3 SCENES, UTC TIMELINE AND DATE-CHECK AUDIT", 10) > 976) {
     warn("masthead subline too wide");
   }
   if (MAINS.length + MEDS.length + MORE.length !== 35) warn("story count is not 35");
@@ -498,20 +512,27 @@ function drawRocket(x: number, y: number, w: number, h: number): void {
   // stars
   const stars: [number, number][] = [[0.12, 0.18], [0.3, 0.1], [0.55, 0.22], [0.78, 0.12], [0.9, 0.3], [0.2, 0.42], [0.85, 0.55], [0.45, 0.08]];
   for (const s of stars) cv.disc(x + s[0] * w, y + s[1] * h, 2.2, WHITE);
-  // planet arc
-  cv.disc(x + w * 0.82, y + h * 0.95, 34, TEAL);
-  cv.disc(x + w * 0.82, y + h * 0.95, 26, [30, 140, 132]);
-  // rocket body
+  // Earth, low on the right, fully inside the panel: blue ocean, green
+  // continents, white cloud arcs - a planet, not a teal blob.
+  const ex = x + w * 0.84;
+  const ey = y + h * 0.76;
+  cv.disc(ex, ey, 18, [40, 110, 180]);
+  cv.disc(ex - 6, ey - 4, 6, [60, 160, 90]);
+  cv.disc(ex + 7, ey + 5, 4.5, [60, 160, 90]);
+  cv.polyline([[ex - 14, ey - 9], [ex - 3, ey - 12], [ex + 9, ey - 9]], WHITE, 2);
+  cv.polyline([[ex - 10, ey + 10], [ex + 1, ey + 7], [ex + 12, ey + 10]], WHITE, 2);
+  // rocket body (kept inside the panel: nose near the top, flame tip at
+  // the bottom edge, never spilling onto the kicker below)
   const bx = x + w * 0.42;
-  const by = y + h * 0.16;
+  const by = y + h * 0.1;
   cv.polyFill([[bx, by + 52], [bx + 8, by + 18], [bx + 16, by], [bx + 24, by + 18], [bx + 32, by + 52]], WHITE);
   cv.polyFill([[bx + 8, by + 52], [bx + 24, by + 52], [bx + 28, by + 66], [bx + 4, by + 66]], RED);
   cv.polyFill([[bx - 2, by + 44], [bx + 8, by + 38], [bx + 8, by + 58]], RED);
   cv.polyFill([[bx + 24, by + 38], [bx + 34, by + 44], [bx + 24, by + 58]], RED);
   cv.disc(bx + 16, by + 24, 5, SKY);
   // flame
-  cv.polyFill([[bx + 10, by + 66], [bx + 16, by + 88], [bx + 22, by + 66]], GOLD);
-  cv.polyFill([[bx + 13, by + 66], [bx + 16, by + 78], [bx + 19, by + 66]], [230, 120, 40]);
+  cv.polyFill([[bx + 10, by + 66], [bx + 16, by + 78], [bx + 22, by + 66]], GOLD);
+  cv.polyFill([[bx + 13, by + 66], [bx + 16, by + 74], [bx + 19, by + 66]], [230, 120, 40]);
   // ground line
   cv.fillRect(x, y + h - 6, w, 6, GOLD);
 }
@@ -544,27 +565,51 @@ function drawTanker(x: number, y: number, w: number, h: number): void {
 }
 
 function drawRefinery(x: number, y: number, w: number, h: number): void {
-  cv.fillRect(x, y, w, h, [58, 40, 34]);
-  cv.disc(x + w * 0.78, y + h * 0.2, 14, [240, 200, 90]);
-  // towers
-  cv.fillRect(x + w * 0.1, y + h * 0.3, w * 0.1, h * 0.62, [200, 200, 200]);
-  cv.fillRect(x + w * 0.26, y + h * 0.45, w * 0.12, h * 0.47, [170, 170, 170]);
-  cv.fillRect(x + w * 0.46, y + h * 0.22, w * 0.08, h * 0.7, [220, 220, 220]);
-  cv.polyFill([[x + w * 0.6, y + h * 0.92], [x + w * 0.68, y + h * 0.5], [x + w * 0.76, y + h * 0.92]], [150, 150, 150]);
-  cv.fillRect(x + w * 0.82, y + h * 0.55, w * 0.1, h * 0.37, [180, 180, 180]);
-  // pipes
-  cv.line(x + w * 0.1, y + h * 0.6, x + w * 0.9, y + h * 0.6, [210, 210, 210], 4);
-  // flames
-  const flame = (fx: number, fy: number, s: number): void => {
-    cv.polyFill([[fx - s, fy], [fx, fy - s * 1.8], [fx + s, fy], [fx + s * 0.5, fy - s * 0.7], [fx, fy - s * 0.3], [fx - s * 0.5, fy - s * 0.7]], [240, 120, 30]);
-    cv.polyFill([[fx - s * 0.45, fy], [fx, fy - s], [fx + s * 0.45, fy]], [250, 200, 60]);
+  // Dusk sky over a refinery, drawn to READ as a refinery: a distillation
+  // tower with tray rings, a flare stack with a big layered flame,
+  // spherical storage tanks, a horizontal tank and a pipe rack. (Round 2
+  // redraw: the old grey blocks read as a city skyline, not a refinery.)
+  cv.fillRect(x, y, w, h, [46, 32, 40]);
+  // sunset band + low sun
+  cv.fillRect(x, y + h * 0.42, w, h * 0.22, [122, 64, 40]);
+  cv.disc(x + w * 0.86, y + h * 0.3, 11, [240, 190, 90]);
+  // ground
+  cv.fillRect(x, y + h * 0.86, w, h * 0.14, [24, 18, 16]);
+  // spherical storage tanks (left), with legs down to the ground
+  const sphere = (cx: number, cy: number, r: number): void => {
+    cv.disc(cx, cy, r, [150, 158, 160]);
+    cv.disc(cx - r * 0.32, cy - r * 0.35, r * 0.5, [188, 192, 194]);
+    cv.line(cx - r * 0.5, cy + r * 0.8, cx - r * 0.5, y + h * 0.86, [110, 116, 118], 2);
+    cv.line(cx + r * 0.5, cy + r * 0.8, cx + r * 0.5, y + h * 0.86, [110, 116, 118], 2);
   };
-  flame(x + w * 0.15, y + h * 0.3, 10);
-  flame(x + w * 0.5, y + h * 0.22, 12);
-  flame(x + w * 0.72, y + h * 0.5, 9);
-  // smoke
-  cv.disc(x + w * 0.5, y + h * 0.08, 8, [120, 120, 120]);
-  cv.disc(x + w * 0.56, y + h * 0.04, 6, [140, 140, 140]);
+  sphere(x + w * 0.13, y + h * 0.68, 15);
+  sphere(x + w * 0.28, y + h * 0.72, 11);
+  // distillation tower (centre): tall column, tray rings, domed cap,
+  // small pilot flame on top
+  const tx = x + w * 0.46;
+  const top = y + h * 0.16;
+  const bot = y + h * 0.86;
+  cv.fillRect(tx - 11, top, 22, bot - top, [200, 205, 208]);
+  cv.polyFill([[tx - 11, top], [tx, top - 9], [tx + 11, top]], [170, 175, 178]);
+  for (let i = 0; i < 5; i++) {
+    const ty = top + 12 + i * 11;
+    cv.fillRect(tx - 14, ty, 28, 3, [140, 145, 148]);
+  }
+  cv.polyFill([[tx - 6, top - 9], [tx, top - 20], [tx + 6, top - 9]], [240, 140, 40]);
+  // flare stack (right): thin stack, big layered flame, smoke curls
+  const fx = x + w * 0.7;
+  const ftop = y + h * 0.26;
+  cv.fillRect(fx - 4, ftop, 8, bot - ftop, [180, 185, 188]);
+  cv.fillRect(fx - 7, ftop, 14, 4, [150, 155, 158]);
+  cv.polyFill([[fx - 12, ftop], [fx, ftop - 20], [fx + 12, ftop], [fx + 6, ftop - 8], [fx, ftop - 3], [fx - 6, ftop - 8]], [235, 110, 25]);
+  cv.polyFill([[fx - 6, ftop], [fx, ftop - 12], [fx + 6, ftop]], [250, 200, 60]);
+  cv.disc(fx + 18, ftop - 22, 6, [120, 116, 112]);
+  cv.disc(fx + 28, ftop - 30, 4.5, [140, 136, 132]);
+  // horizontal tank (far right) + pipe rack along the bottom
+  cv.fillRect(x + w * 0.83, y + h * 0.68, w * 0.13, h * 0.18, [165, 170, 172]);
+  cv.disc(x + w * 0.83, y + h * 0.77, h * 0.09, [165, 170, 172]);
+  cv.line(x + w * 0.05, y + h * 0.8, x + w * 0.95, y + h * 0.8, [210, 212, 214], 4);
+  cv.line(x + w * 0.05, y + h * 0.84, x + w * 0.95, y + h * 0.84, [180, 182, 184], 3);
   cv.fillRect(x, y + h - 6, w, 6, GOLD);
 }
 
@@ -579,7 +624,7 @@ function drawMasthead(): void {
   drawTextCentred(512, 18, "THE WORLD TODAY", 50, NAVY, true);
   rule(24, 80, 976, RED, 3);
   drawTextCentred(512, 88, "WEDNESDAY, 25 NOVEMBER 2026", 24, RED, true);
-  drawTextCentred(512, 118, "FIRST PAKISTANI IN ORBIT - 35 STORIES, 9 REGIONS, 10 FIELDS, 3 SCENES, UTC TIMELINE AND DATE-CHECK AUDIT", 10, INK, true);
+  drawTextCentred(512, 118, "FIRST PAKISTANI IN ORBIT - 35 STORIES, 9 REGIONS, 11 FIELDS, 3 SCENES, UTC TIMELINE AND DATE-CHECK AUDIT", 10, INK, true);
   rule(24, 138, 976, INK, 2);
 }
 
@@ -692,15 +737,18 @@ function drawMap(): void {
   ];
   for (const c of conts) cv.polyFill(c.map((p) => px(p[0], p[1])), land);
   // Numbered pins: 1 China, 2 Hormuz, 3 Riyadh, 6 Cartagena, 7 Samara,
-  // 9 South Africa, 14 Java, 17 Gaza. The three Middle East pins are
-  // nudged apart so their numbers stay legible.
+  // 9 Nigeria meth (Enugu), 30 Niger State, 11 South Africa, 14 Java,
+  // 17 Gaza. The Middle East pins are nudged apart, and the two Nigeria
+  // pins are nudged apart too, so their numbers stay legible.
   const pins: [number, number, string, number, number][] = [
     [116, 30, "1", 0, 0],
     [58, 27, "2", 14, -2],
     [46, 23, "3", 2, 12],
     [-75, 10, "6", 0, 0],
     [50, 53, "7", 0, 0],
-    [25, -29, "9", 0, 0],
+    [7.5, 6.5, "9", 0, 0],
+    [4, 10.5, "30", -16, -10],
+    [25, -29, "11", 0, 0],
     [107, -7, "14", 0, 0],
     [34, 31, "17", -14, -6],
   ];
