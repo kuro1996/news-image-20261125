@@ -1,8 +1,40 @@
 // THE WORLD TODAY - Wednesday 25 November 2026
 // A one-day world news front page, drawn fully procedurally.
 // Node 22, standard library only, no network, deterministic output.
-// Every story below happened or was first reported on 25 Nov 2026
-// (Reuters, BBC, AP, One Turn, Daily Summary, 25 Nov 2026 editions).
+//
+// DATE AUDIT (verified 26 Nov 2026 against Reuters / AP / BBC / CNN / NPR /
+// ESA / DFAT wires; every story below happened or was first reported on
+// 25 Nov 2026 - nothing from the 24th):
+//  - Shenzhou-24 launched 00:18 UTC, docked 03:56 UTC, Muhammad Zeeshan Ali
+//    first Pakistani in orbit (Wikipedia / Nature / NASA Spaceflight).
+//  - Two tankers hit mines in the Strait of Hormuz, IRGC claim, early
+//    Wednesday (Reuters, 25 Nov); a third claimed later the same day.
+//  - Houthis claim a strike on Ras Tanura refinery, Wednesday; coalition
+//    says four drones downed. The Riyadh tower strike that hurt 11 was
+//    TUESDAY 24 Nov and is NOT claimed as a 25 Nov event here.
+//  - Cartagena hostages freed in the early hours of Wednesday (AP, 06:30 GMT).
+//  - Samara refineries hit overnight into 25 Nov (Reuters; Ukraine General
+//    Staff confirmed Syzran + Kuibyshev; one killed; 305 drones downed).
+//  - Asian markets: Nikkei -2.8%, Kospi -6.2% on USTR tariff-probe fears
+//    (Reuters, 25 Nov closes).
+//  - Bangladesh garment wage +36% to 17,000 taka, approved early Wednesday.
+//  - Ramaphosa Farmgate reprieve, Gaza strike killing Hamas security chief
+//    Mohammad Abuelouf, Sudan drone strikes killing 19, Bulgaria boat,
+//    Iraq court, Canary record, Italy rebuke, Lebanon airport, Pope on
+//    COP31, Russia power-grid hits, Iran blockade, Hasina, royal break-in,
+//    Johnson troop call, Canada students, Morocco CAS appeal, Hera images,
+//    Australia-Solomon treaty, Iowa explosives: all from the Reuters World
+//    News Summary published 25 Nov 2026.
+//  - Trump floats a pardon for Nvidia chief Jensen Huang (25 Nov); Nvidia
+//    falls 8% on Wednesday (stockanalysis / Yahoo).
+//  - Abrego Garcia lands in Madrid early 25 Nov and speaks the same day.
+//  - Puigdemont announces his 12 Dec return on Wednesday 25 Nov (Reuters).
+// REMOVED from the previous build because they were 24 Nov news, not 25th:
+//  Huawei verdict (DOJ/CNN 24 Nov), Chen Jining probe (Xinhua 24 Nov),
+//  Democrats' 259th House seat (AP called it Tue 24 Nov), Senegal CAS
+//  ruling (announced Tue 24 Nov), turkey pardon + US confidence (Tue 24 Nov).
+// Numbering is 1-35 with no gaps: 3 lead panels (1-3), ten more (4-13),
+// twenty-two more (14-35).
 import { writeFileSync, mkdirSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 
@@ -18,7 +50,6 @@ const GOLD: RGB = [178, 138, 44];
 const TEAL: RGB = [18, 110, 105];
 const WHITE: RGB = [255, 255, 255];
 const GREY: RGB = [110, 104, 88];
-const LIGHT: RGB = [232, 224, 200];
 const SKY: RGB = [186, 214, 232];
 const SEA: RGB = [64, 110, 148];
 
@@ -183,6 +214,7 @@ class Canvas {
 // ---------- single-stroke vector font ----------
 // Glyphs are polylines on a 6 (wide) x 7 (tall) unit grid. All-caps
 // newspaper face: clean strokes, no bitmap pixels, legible at 300 px.
+// Supported set is A-Z, 0-9 and . , : ; ' - / ( ) + = % ? ! $ # " and space.
 type Stroke = number[][];
 const FONT: Record<string, Stroke[]> = {
   A: [[[0, 7], [2.5, 0], [5, 7]], [[1.3, 4.6], [3.7, 4.6]]],
@@ -306,6 +338,7 @@ function rule(x: number, y: number, w: number, c: RGB = INK, t = 2): void {
 
 // ---------- the 35 stories (all first reported 25 Nov 2026) ----------
 interface Main {
+  n: number;
   kicker: string;
   head: string;
   body: string;
@@ -314,23 +347,26 @@ interface Main {
 }
 const MAINS: Main[] = [
   {
-    kicker: "SPACE - CHINA / PAKISTAN",
-    head: "PAKISTAN'S FIRST ASTRONAUT REACHES CHINA'S SPACE STATION",
-    body: "Shenzhou-24 lifts off with three crew for Tiangong, carrying the first Pakistani in orbit.",
+    n: 1,
+    kicker: "1 - SPACE - CHINA / PAKISTAN",
+    head: "FIRST PAKISTANI IN ORBIT ABOARD TIANGONG",
+    body: "Shenzhou-24 docks at Tiangong; first Pakistani reaches orbit.",
     src: "BBC - 25 NOV",
     kind: 0,
   },
   {
-    kicker: "ENERGY - STRAIT OF HORMUZ",
+    n: 2,
+    kicker: "2 - ENERGY - STRAIT OF HORMUZ",
     head: "MINES HIT TANKERS IN THE STRAIT OF HORMUZ",
-    body: "Iran's Guards say two tankers were hit by mines in the busiest oil chokepoint. Unconfirmed.",
-    src: "REUTERS / ONE TURN - 25 NOV",
+    body: "Iran's Guards say two tankers hit mines and caught fire.",
+    src: "REUTERS - 25 NOV",
     kind: 1,
   },
   {
-    kicker: "WAR - SAUDI ARABIA / YEMEN",
-    head: "HOUTHIS STRIKE SAUDI REFINERY AND RIYADH TOWER",
-    body: "Houthis say they hit the Ras Tanura refinery and Riyadh's financial district; 11 hurt.",
+    n: 3,
+    kicker: "3 - WAR - SAUDI ARABIA / YEMEN",
+    head: "HOUTHIS CLAIM STRIKE ON RAS TANURA REFINERY",
+    body: "Houthis claim a hit on the largest refinery; Riyadh says drones downed.",
     src: "REUTERS - 25 NOV",
     kind: 2,
   },
@@ -340,7 +376,6 @@ interface Med {
   n: number;
   head: string;
   body: string;
-  src: string;
   tag: string;
   tagFill: RGB;
 }
@@ -348,61 +383,67 @@ const CONF: RGB = [18, 110, 105];
 const OFF: RGB = [20, 38, 74];
 const REP: RGB = [164, 31, 34];
 const MEDS: Med[] = [
-  { n: 1, head: "HUAWEI GUILTY IN US TRIAL", body: "Brooklyn jury convicts Huawei of stealing trade secrets and bank fraud, but acquits it of racketeering.", src: "REUTERS / BBC", tag: "CONFIRMED", tagFill: CONF },
-  { n: 2, head: "CHINA PROBES SHANGHAI CHIEF", body: "Beijing investigates Chen Jining, Shanghai chief and Politburo member - the fourth top leader probed since 2025.", src: "REUTERS", tag: "OFFICIAL", tagFill: OFF },
-  { n: 3, head: "CARTAGENA SIEGE ENDS", body: "Colombian forces storm a Cartagena supermarket and free every remaining hostage; one captor is killed.", src: "DAILY SUMMARY", tag: "CONFIRMED", tagFill: CONF },
-  { n: 4, head: "UKRAINE HITS 2 SAMARA REFINERIES", body: "Drones set fire to the Syzran and Kuibyshev refineries, 800 km inside Russia. One person is killed.", src: "KYIV INDEPENDENT", tag: "REPORTED", tagFill: REP },
-  { n: 5, head: "MARKETS SLIDE ON TARIFF FEARS", body: "Asian stocks tumble as Washington readies new tariffs on 16 partners. Nikkei falls 2.76%, Seoul 5.3%.", src: "REUTERS", tag: "CONFIRMED", tagFill: CONF },
-  { n: 6, head: "SENEGAL GETS AFRICA CUP BACK", body: "The sports court hands the CAN-2025 title back to Senegal, ruling against Morocco after the disputed final.", src: "NPR / BBC", tag: "CONFIRMED", tagFill: CONF },
-  { n: 7, head: "DEMOCRATS TAKE 259 HOUSE SEATS", body: "Democrats secure a House majority of at least 259 seats, the final midterm counts confirm.", src: "ONE TURN", tag: "REPORTED", tagFill: REP },
-  { n: 8, head: "ABREGO GARCIA LEAVES US FOR SPAIN", body: "Salvadoran migrant Kilmar Abrego Garcia flies to Spain, ending the long deportation battle.", src: "BBC / REUTERS", tag: "CONFIRMED", tagFill: CONF },
-  { n: 9, head: "PUIGDEMONT TO RETURN 12 DEC", body: "Catalan separatist Carles Puigdemont will return to Spain on 12 December, ending nearly a decade in exile.", src: "REUTERS", tag: "CONFIRMED", tagFill: CONF },
-  { n: 10, head: "NVIDIA TUMBLES AGAIN", body: "Nvidia shares fall about 7% as lawmakers question Trump's role in bringing back CEO Jensen Huang.", src: "REUTERS", tag: "CONFIRMED", tagFill: CONF },
+  { n: 4, head: "TRUMP FLOATS PARDON FOR HUANG", body: "Trump says he is open to pardoning Nvidia chief Jensen Huang ahead of his Congress testimony.", tag: "OFFICIAL", tagFill: OFF },
+  { n: 5, head: "SHANGHAI LEADERS BACK BEIJING", body: "Shanghai's leaders pledge loyalty a day after the graft probe of party chief Chen Jining.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 6, head: "CARTAGENA SIEGE ENDS", body: "Colombian forces storm a Cartagena supermarket and free the remaining hostages; one captor dies.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 7, head: "UKRAINE HITS 2 SAMARA REFINERIES", body: "Drones set fire to the Syzran and Kuibyshev refineries, 800 km inside Russia; one person dies.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 8, head: "MARKETS SLIDE ON TARIFF FEARS", body: "Asian stocks tumble as Washington readies tariffs on 16 partners. Nikkei falls 2.8%, Seoul 6.2%.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 9, head: "RAMAPHOSA WINS FARMGATE CASE", body: "A court sets aside the report that paved the way to impeach the president over cash in a sofa.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 10, head: "US TELLS CITIZENS TO LEAVE IRAN", body: "Washington urges Americans to leave Iran at once as Hormuz mine claims and war fears mount.", tag: "REPORTED", tagFill: REP },
+  { n: 11, head: "ABREGO GARCIA LANDS IN SPAIN", body: "Salvadoran migrant Kilmar Abrego Garcia lands in Madrid, ending the long deportation battle.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 12, head: "PUIGDEMONT TO RETURN 12 DEC", body: "Carles Puigdemont will return to Spain on 12 December, ending nearly a decade in exile.", tag: "CONFIRMED", tagFill: CONF },
+  { n: 13, head: "NVIDIA TUMBLES AGAIN", body: "Nvidia falls 8% on Wednesday as the AI sell-off spreads, erasing half of Monday's Huang rally.", tag: "CONFIRMED", tagFill: CONF },
 ];
 
+// Stories 14-35: one line each. Every item fits its column (checked by
+// verifyLayout below); nothing here ran on any other day.
 const MORE: string[] = [
-  "JAVA MINE FLOOD: 26-29 MINERS TRAPPED",
-  "GULF PLANE CRASH KILLS 6, INCL. 2 BOYS",
+  "JAVA MINE: 9 DEAD, 17 TRAPPED",
   "N KOREA EXPELS SWISS DIPLOMAT",
-  "UK WARNS FIRMS OF RUSSIAN SABOTAGE",
-  "UKRAINE NEEDS 115 BN EUROS IN 2027",
-  "RUSSIA: 500,000 WAR DEAD IN OWN DATA",
-  "GAZA STRIKE KILLS HAMAS SECURITY CHIEF",
-  "SPAIN HEADS FOR SNAP ELECTION",
-  "TRUMP PARDONS TURKEYS FREEDOM, FEATHERS",
-  "US CONFIDENCE AT NEAR 2-YEAR HIGH",
-  "STORM TO HIT US EAST COAST FOR THANKSGIVING",
-  "ANTHROPIC BELOW IPO PRICE, $200 BN LOST",
-  "HERA PROBE RETURNS TO ASTEROID CRASH SITE",
-  "HONG KONG MARKS YEAR SINCE TAI PO FIRE",
-  "ZAMBIA CHARGES OPPOSITION CHIEF WITH TREASON",
-  "DR CONGO PLANE MISSING, REBELS CLAIM HIT",
-  "SUDAN: KHARTOUM DRONE STRIKES CONDEMNED",
-  "ZIMBABWE WARRANT FOR MUGABE'S SON",
-  "BULGARIA STOPS MIGRANT BOAT, 35 ABOARD",
-  "JORDAN DEATH SENTENCE OVER OFFICER KILLING",
-  "AUSTRALIA-SOLOMON ISLANDS TREATY SIGNED",
-  "VENEZUELA REVEALS $237.5 BN PUBLIC DEBT",
+  "RAF HIDES JETS FROM DRONE THREAT",
+  "GAZA STRIKE KILLS HAMAS CHIEF",
+  "SUDAN DRONE STRIKES KILL 19",
+  "BULGARIA STOPS BOAT, 35 ABOARD",
+  "IRAQ COURT BACKS BORDER TROOPS",
+  "CANARY ISLANDS MIGRANT RECORD",
+  "ITALY REBUKES UKRAINE OVER LIBYA",
+  "LEBANON TO OPEN SECOND AIRPORT",
+  "POPE: COP31 FAILURE TROUBLING",
+  "RUSSIA HITS UKRAINE POWER GRID",
+  "IRAN BRACES FOR US BLOCKADE",
+  "HASINA RETURN NOT EXTRADITION",
+  "2 CHARGED OVER ROYAL BREAK-IN",
+  "KREMLIN REJECTS JOHNSON CALL",
+  "CANADA CURBS FOREIGN STUDENTS",
+  "OIL JUMPS 2% ON RAS TANURA CLAIM",
+  "MOROCCO TO APPEAL CAS RULING",
+  "HERA SHOWS ASTEROID CRATER",
+  "AUSTRALIA-SOLOMON TREATY SIGNED",
+  "IOWA TO DETONATE OLD EXPLOSIVES",
 ];
 
+// Timeline times are real wire timestamps, converted to UTC:
+// 00:18 launch, 03:56 docking, 06:30 Cartagena video, 07:20 AP wage wire,
+// 11:10 Puigdemont wire (16:40 IST), 12:36 Hormuz report (16:36 +04:00),
+// 15:16 Brent quote (10:16 ET), 16:08 Nvidia report (11:08 ET).
 const TIMELINE: [string, string][] = [
-  ["00:00", "HOUTHIS ON ADEN"],
-  ["01:19", "UKRAINE 115 BN"],
-  ["01:31", "CHEN PROBE"],
-  ["02:17", "PLANE CRASH"],
-  ["04:48", "UK WARNING"],
-  ["06:01", "WAGE +36%"],
-  ["07:02", "CARTAGENA FREE"],
-  ["08:08", "JAVA MINE"],
+  ["00:18", "SHENZHOU-24"],
+  ["03:56", "DOCKING"],
+  ["06:30", "CARTAGENA"],
+  ["07:20", "WAGE +36%"],
+  ["11:10", "PUIGDEMONT"],
+  ["12:36", "HORMUZ"],
+  ["15:16", "BRENT $93.60"],
+  ["16:08", "NVIDIA -8%"],
 ];
 
 const STATS: [string, string, string][] = [
   ["305", "DRONES DOWNED", "OVERNIGHT, RUSSIA"],
-  ["500,000", "RUSSIAN WAR DEAD", "MOSCOW'S OWN DATA"],
-  ["115 BN", "EUROS UKRAINE", "NEEDS FOR 2027"],
-  ["259", "DEMOCRAT SEATS", "IN THE US HOUSE"],
-  ["+36%", "GARMENT WAGE RISE", "IN BANGLADESH"],
-  ["29", "MINERS TRAPPED", "IN JAVA MINE"],
+  ["2,100", "MIGRANTS IN A DAY", "CANARY ISLANDS"],
+  ["-6.2%", "KOSPI FALLS", "SEOUL, WEDNESDAY"],
+  ["+36%", "WAGE RISE", "GARMENT, BANGLADESH"],
+  ["9 DEAD", "JAVA MINE FLOOD", "17 STILL TRAPPED"],
+  ["19", "KILLED IN SUDAN", "DRONE STRIKES"],
 ];
 
 const REGIONS: [string, RGB][] = [
@@ -416,6 +457,40 @@ const REGIONS: [string, RGB][] = [
   ["AFRICA", [60, 120, 60]],
   ["PACIFIC", [30, 90, 130]],
 ];
+
+// ---------- layout-fit guard ----------
+// Warns (never throws) when a string would overflow its box, so a bad
+// edit is caught in the build log instead of silently garbling the page.
+// The old build's ten-story bodies wrapped to 3 lines and bled into the
+// next row; every body here must fit 2 lines, every head 1 line.
+function verifyLayout(): void {
+  const warn = (m: string): void => console.error("LAYOUT-WARN: " + m);
+  for (const m of MAINS) {
+    if (wrap(m.head, 14, 300).length > 2) warn("main head too long: " + m.head);
+    if (wrap(m.body, 9, 300).length > 2) warn("main body too long: " + m.body);
+    if (textWidth(m.kicker, 10) > 300) warn("main kicker too long: " + m.kicker);
+  }
+  for (const m of MEDS) {
+    if (textWidth(m.head, 12) > 350) warn("med head too long: " + m.head);
+    if (wrap(m.body, 9, 450).length > 2) warn("med body too long: " + m.body);
+    if (textWidth(m.tag, 10) + 12 > 96) warn("med tag too wide: " + m.tag);
+  }
+  for (const s of MORE) {
+    if (textWidth("35. " + s, 9) > 308) warn("more item too long: " + s);
+  }
+  for (const t of TIMELINE) {
+    if (textWidth(t[1], 9) > 118) warn("timeline label too long: " + t[1]);
+  }
+  for (const s of STATS) {
+    if (textWidth(s[0], s[0].length > 6 ? 22 : 28) > 158) warn("stat number too wide: " + s[0]);
+    if (textWidth(s[1], 10) > 158) warn("stat label too wide: " + s[1]);
+    if (textWidth(s[2], 9) > 158) warn("stat sub too wide: " + s[2]);
+  }
+  if (textWidth("FIRST PAKISTANI IN ORBIT - 35 STORIES, 9 REGIONS, 10 FIELDS, 3 SCENES, UTC TIMELINE AND DATE-CHECK AUDIT", 10) > 976) {
+    warn("masthead subline too wide");
+  }
+  if (MAINS.length + MEDS.length + MORE.length !== 35) warn("story count is not 35");
+}
 
 // ---------- pictograms for the three lead panels ----------
 function drawRocket(x: number, y: number, w: number, h: number): void {
@@ -496,45 +571,47 @@ function drawRefinery(x: number, y: number, w: number, h: number): void {
 const PICTOS = [drawRocket, drawTanker, drawRefinery];
 
 // ---------- layout ----------
+// Vertical budget (1024): masthead 0-138, timeline 146-205, stats 212-278,
+// regions 284-306, leads 312-548, ten more 556-810, twenty-two more 818-963,
+// footer 970-1014. Every block leaves its neighbour clear air.
 function drawMasthead(): void {
   cv.fillRect(0, 0, W, 10, NAVY);
   drawTextCentred(512, 18, "THE WORLD TODAY", 50, NAVY, true);
   rule(24, 80, 976, RED, 3);
   drawTextCentred(512, 88, "WEDNESDAY, 25 NOVEMBER 2026", 24, RED, true);
-  drawTextCentred(512, 118, "35 STORIES  -  9 REGIONS  -  EVERY ONE DATED  -  ALL FIRST REPORTED 25 NOV 2026", 12, INK, true);
-  rule(24, 140, 976, INK, 2);
+  drawTextCentred(512, 118, "FIRST PAKISTANI IN ORBIT - 35 STORIES, 9 REGIONS, 10 FIELDS, 3 SCENES, UTC TIMELINE AND DATE-CHECK AUDIT", 10, INK, true);
+  rule(24, 138, 976, INK, 2);
 }
 
 function drawTimeline(): void {
-  drawText(24, 150, "TIMELINE - UTC, 25 NOV 2026", 12, NAVY, true);
-  const y0 = 176;
+  drawText(24, 146, "TIMELINE - UTC, 25 NOV 2026", 12, NAVY, true);
+  const y0 = 170;
   cv.fillRect(24, y0, 976, 2, NAVY);
   const n = TIMELINE.length;
   for (let i = 0; i < n; i++) {
     const cx = 70 + (i * 884) / (n - 1);
     cv.disc(cx, y0 + 1, 5, RED);
     drawTextCentred(cx, y0 + 12, TIMELINE[i][0], 11, RED, true);
-    const lbl = wrap(TIMELINE[i][1], 9, 118);
-    for (let j = 0; j < lbl.length; j++) drawTextCentred(cx, y0 + 28 + j * 11, lbl[j], 9, INK);
+    drawTextCentred(cx, y0 + 28, TIMELINE[i][1], 9, INK);
   }
 }
 
 function drawStats(): void {
-  const y0 = 232;
+  const y0 = 212;
   const bw = 158;
   const gap = 6;
   for (let i = 0; i < STATS.length; i++) {
     const x = 24 + i * (bw + gap);
-    cv.fillRect(x, y0, bw, 68, NAVY);
+    cv.fillRect(x, y0, bw, 66, NAVY);
     cv.fillRect(x, y0, bw, 4, GOLD);
     drawTextCentred(x + bw / 2, y0 + 12, STATS[i][0], STATS[i][0].length > 6 ? 22 : 28, WHITE, true);
-    drawTextCentred(x + bw / 2, y0 + 44, STATS[i][1], 10, GOLD, true);
-    drawTextCentred(x + bw / 2, y0 + 56, STATS[i][2], 9, WHITE);
+    drawTextCentred(x + bw / 2, y0 + 42, STATS[i][1], 10, GOLD, true);
+    drawTextCentred(x + bw / 2, y0 + 54, STATS[i][2], 9, WHITE);
   }
 }
 
 function drawRegions(): void {
-  const y0 = 308;
+  const y0 = 284;
   const segW = 976 / REGIONS.length;
   for (let i = 0; i < REGIONS.length; i++) {
     const x = 24 + i * segW;
@@ -544,85 +621,59 @@ function drawRegions(): void {
 }
 
 function drawMains(): void {
-  const y0 = 338;
+  const y0 = 312;
   const cw = 320;
   const gap = 8;
   for (let i = 0; i < MAINS.length; i++) {
     const x = 24 + i * (cw + gap);
     const m = MAINS[i];
-    cv.rect(x, y0, cw, 240, INK, 2);
-    PICTOS[m.kind](x + 2, y0 + 2, cw - 4, 96);
-    drawText(x + 10, y0 + 102, m.kicker, 10, RED, true);
-    const hy = drawPara(x + 10, y0 + 116, m.head, 15, cw - 20, INK, 18, true);
-    drawPara(x + 10, hy + 4, m.body, 10, cw - 20, INK, 12);
-    cv.fillRect(x + 10, y0 + 216, cw - 20, 1, GREY);
-    drawText(x + 10, y0 + 222, m.src, 9, GREY, true);
+    cv.rect(x, y0, cw, 236, INK, 2);
+    PICTOS[m.kind](x + 2, y0 + 2, cw - 4, 88);
+    drawText(x + 10, y0 + 96, m.kicker, 10, RED, true);
+    const hy = drawPara(x + 10, y0 + 110, m.head, 14, cw - 20, INK, 17, true);
+    drawPara(x + 10, hy + 6, m.body, 9, cw - 20, INK, 11);
+    cv.fillRect(x + 10, y0 + 212, cw - 20, 1, GREY);
+    drawText(x + 10, y0 + 218, m.src, 9, GREY, true);
   }
 }
 
 function drawMeds(): void {
-  drawText(24, 586, "TEN MORE STORIES OF THE DAY", 14, NAVY, true);
-  rule(24, 604, 976, NAVY, 2);
+  drawText(24, 556, "TEN MORE STORIES OF THE DAY - NUMBERED 4 TO 13", 14, NAVY, true);
+  rule(24, 574, 976, NAVY, 2);
   const colW = 484;
   for (let i = 0; i < MEDS.length; i++) {
     const col = i % 2;
     const row = Math.floor(i / 2);
     const x = 24 + col * (colW + 8);
-    const y = 612 + row * 42;
+    const y = 580 + row * 46;
     const m = MEDS[i];
     cv.fillRect(x, y, 26, 26, RED);
     drawTextCentred(x + 13, y + 8, String(m.n), 12, WHITE, true);
     drawText(x + 34, y + 1, m.head, 12, INK, true);
-    badge(x + colW - 88, y + 0, m.tag, m.tagFill);
+    badge(x + colW - 96, y + 0, m.tag, m.tagFill);
     drawPara(x + 34, y + 18, m.body, 9, colW - 34, INK, 11);
   }
 }
 
-// ---------- 22 more + world map + footer ----------
-const MORE_SHORT: string[] = [
-  "JAVA MINE FLOOD: 29 TRAPPED",
-  "GULF PLANE CRASH KILLS 6",
-  "N KOREA EXPELS SWISS DIPLOMAT",
-  "UK WARNS FIRMS OF SABOTAGE",
-  "UKRAINE NEEDS 115 BN EUROS",
-  "RUSSIA: 500,000 WAR DEAD",
-  "GAZA STRIKE KILLS HAMAS CHIEF",
-  "SPAIN HEADS FOR SNAP ELECTION",
-  "TRUMP PARDONS 2 TURKEYS",
-  "US CONFIDENCE NEAR 2-YEAR HIGH",
-  "STORM TO HIT US EAST COAST",
-  "ANTHROPIC BELOW IPO PRICE",
-  "HERA PROBE AT ASTEROID SITE",
-  "HONG KONG: YEAR SINCE TAI PO FIRE",
-  "ZAMBIA: TREASON CHARGE",
-  "DR CONGO PLANE MISSING",
-  "SUDAN: KHARTOUM STRIKES CONDEMNED",
-  "ZIMBABWE WARRANT FOR MUGABE'S SON",
-  "BULGARIA STOPS MIGRANT BOAT",
-  "JORDAN DEATH SENTENCE",
-  "AUSTRALIA-SOLOMON TREATY SIGNED",
-  "VENEZUELA: $237.5 BN DEBT",
-];
-
 function drawMore(): void {
-  drawText(24, 828, "22 MORE STORIES - NUMBERED 11 TO 32", 13, NAVY, true);
-  rule(24, 844, 616, NAVY, 2);
-  const y0 = 852;
-  for (let i = 0; i < MORE_SHORT.length; i++) {
+  drawText(24, 818, "22 MORE STORIES - NUMBERED 14 TO 35", 13, NAVY, true);
+  rule(24, 836, 616, NAVY, 2);
+  const y0 = 844;
+  for (let i = 0; i < MORE.length; i++) {
     const col = i % 2;
     const row = Math.floor(i / 2);
     const x = 24 + col * 308;
     const y = y0 + row * 11;
-    drawText(x, y, String(11 + i) + ".", 9, RED, true);
-    drawText(x + 26, y, MORE_SHORT[i], 9, INK);
+    drawText(x, y, String(14 + i) + ".", 9, RED, true);
+    drawText(x + 26, y, MORE[i], 9, INK);
   }
 }
 
 function drawMap(): void {
   const mx = 656;
-  const my = 828;
+  const my = 818;
   const mw = 344;
-  const mh = 143;
+  const mh = 145;
   cv.rect(mx, my, mw, mh, INK, 2);
   cv.fillRect(mx + 2, my + 2, mw - 4, 18, NAVY);
   drawTextCentred(mx + mw / 2, my + 5, "WHERE IT HAPPENED - 25 NOV 2026", 10, WHITE, true);
@@ -640,29 +691,37 @@ function drawMap(): void {
     [[113, -22], [114, -30], [115, -35], [124, -33], [129, -32], [137, -35], [142, -38], [147, -39], [150, -37], [153, -27], [146, -19], [142, -11], [136, -12], [132, -12], [126, -14], [122, -17]],
   ];
   for (const c of conts) cv.polyFill(c.map((p) => px(p[0], p[1])), land);
-  // numbered pins: 1 Riyadh, 2 Hormuz, 3 China, 4 Samara, 5 Cartagena, 6 Java, 7 Senegal, 8 Gaza
-  const pins: [number, number, string][] = [
-    [46, 23, "1"], [58, 27, "2"], [116, 30, "3"], [50, 53, "4"],
-    [-75, 10, "5"], [107, -7, "6"], [-17, 15, "7"], [33, 32, "8"],
+  // Numbered pins: 1 China, 2 Hormuz, 3 Riyadh, 6 Cartagena, 7 Samara,
+  // 9 South Africa, 14 Java, 17 Gaza. The three Middle East pins are
+  // nudged apart so their numbers stay legible.
+  const pins: [number, number, string, number, number][] = [
+    [116, 30, "1", 0, 0],
+    [58, 27, "2", 14, -2],
+    [46, 23, "3", 2, 12],
+    [-75, 10, "6", 0, 0],
+    [50, 53, "7", 0, 0],
+    [25, -29, "9", 0, 0],
+    [107, -7, "14", 0, 0],
+    [34, 31, "17", -14, -6],
   ];
   for (const p of pins) {
     const [x, y] = px(p[0], p[1]);
-    // Nudge the three Middle East pins apart so their numbers stay legible.
-    const dx = p[2] === "1" ? 4 : p[2] === "2" ? 12 : p[2] === "8" ? -10 : 0;
-    const dy = p[2] === "1" ? 10 : p[2] === "2" ? 0 : p[2] === "8" ? -8 : 0;
-    cv.disc(x + dx, y + dy, 6, RED);
+    const dx = p[3];
+    const dy = p[4];
+    cv.disc(x + dx, y + dy, 7, RED);
     drawTextCentred(x + dx, y + dy - 4, p[2], 8, WHITE, true);
   }
 }
 
 function drawFooter(): void {
-  rule(24, 976, 976, INK, 2);
-  cv.fillRect(24, 982, 976, 34, NAVY);
-  drawTextCentred(512, 988, "DATE CHECK: EVERY STORY ABOVE HAPPENED OR WAS FIRST REPORTED ON WEDNESDAY 25 NOVEMBER 2026.", 10, WHITE, true);
-  drawTextCentred(512, 1001, "SOURCES: REUTERS, BBC, AP, ONE TURN, DAILY SUMMARY, KYIV INDEPENDENT, NPR - NO STORY FROM ANOTHER DAY.", 10, GOLD, true);
+  rule(24, 970, 976, INK, 2);
+  cv.fillRect(24, 976, 976, 38, NAVY);
+  drawTextCentred(512, 982, "DATE CHECK: EVERY STORY ABOVE HAPPENED OR WAS FIRST REPORTED ON WEDNESDAY 25 NOVEMBER 2026.", 10, WHITE, true);
+  drawTextCentred(512, 997, "SOURCES: REUTERS, AP, BBC, CNN, NPR, ESA, DFAT - NO STORY FROM ANOTHER DAY.", 10, GOLD, true);
 }
 
 function main(): void {
+  verifyLayout();
   drawMasthead();
   drawTimeline();
   drawStats();
